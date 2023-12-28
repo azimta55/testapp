@@ -25,29 +25,39 @@ public class Controller {
 	
 	
 	
-	   @RequestMapping(value = "/getListOfUniCurrency", method = RequestMethod.GET, produces = "application/json")
-	    public List<UniCurrency>   getUniswapPools() throws IOException {
-		   List<UniCurrency> result = null;
-		   ApiClient defaultClient = Configuration.getDefaultApiClient();
-	        defaultClient.setBasePath("https://api.gateio.ws/api/v4");
+	 	@RequestMapping(value = "/getListOfUniCurrency", method = RequestMethod.GET, produces = "application/json")
+	public List<UniCurrency> getUniswapPools() throws IOException {
+	    List<UniCurrency> result = null;
+	    ApiClient defaultClient = Configuration.getDefaultApiClient();
+	    defaultClient.setBasePath("https://api.gateio.ws/api/v4");
 
-	        EarnUniApi apiInstance = new EarnUniApi(defaultClient);
-	        try {
-	         result = apiInstance.listUniCurrencies();
-	            System.out.println(result);
-	        } catch (GateApiException e) {
-	            System.err.println(String.format("Gate api exception, label: %s, message: %s", e.getErrorLabel(), e.getMessage()));
-	            e.printStackTrace();
-	        } catch (ApiException e) {
-	            System.err.println("Exception when calling EarnUniApi#listUniCurrencies");
-	            System.err.println("Status code: " + e.getCode());
-	            System.err.println("Response headers: " + e.getResponseHeaders());
-	            e.printStackTrace();
+	    EarnUniApi apiInstance = new EarnUniApi(defaultClient);
+	    try {
+	        result = apiInstance.listUniCurrencies();
+	        
+	        // Print only the first three items from the list
+	        int itemsToPrint = 3;
+	        int count = 0;
+	        for (UniCurrency currency : result) {
+	            if (count < itemsToPrint) {
+	                System.out.println(currency);
+	                count++;
+	            } else {
+	                break;
+	            }
 	        }
-				
-			
-			return result;
+	    } catch (GateApiException e) {
+	        System.err.println(String.format("Gate api exception, label: %s, message: %s", e.getErrorLabel(), e.getMessage()));
+	        e.printStackTrace();
+	    } catch (ApiException e) {
+	        System.err.println("Exception when calling EarnUniApi#listUniCurrencies");
+	        System.err.println("Status code: " + e.getCode());
+	        System.err.println("Response headers: " + e.getResponseHeaders());
+	        e.printStackTrace();
 	    }
+
+	    return result;
+	}
 	
 	
 
